@@ -1,16 +1,16 @@
 public class LZWencode {
   
-
     public static void main(String[] args) {
         
-        String trial = "3ab45cfea21";
+        String trial = "ababbaababaaabababbbbbaaaaa";
+        MultiwayTrie trie = new MultiwayTrie();
 
         while (trial.length() > 0) {
 
             String phrase = "";
 
-            while(true) {
-
+            while(trial.length() > 0) {
+                
                 //Get the value at the start of the string and append it to the "to add to dictionary" phrase value
                 String section = trial.substring(0, 1);
                 phrase += section;
@@ -18,13 +18,13 @@ public class LZWencode {
                 //Remove the phrase value from the main string
                 trial = trial.substring(1);
 
-                // if (/* Phrase not in dictionary */) {
+                if (!trie.find(phrase)) {
 
-                //     //Add phrase to dictionary
-                //     break;
-                // }
-
-                //Else, loop through again and build the phrase
+                    //Add phrase to dictionary then break out of loop
+                    int phraseNum = trie.insert(phrase);
+                    System.out.println(Integer.toString(phraseNum) + ", " + phrase.substring(phrase.length()-1));
+                    break;
+                }
             }
         }
     }
