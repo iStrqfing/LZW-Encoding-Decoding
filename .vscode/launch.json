@@ -1,0 +1,36 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "ByteToHex",
+            "request": "launch",
+            "mainClass": "ByteToHex",
+            "projectName": "COMPX301Assn2_e618fbd2"
+        },
+        {
+            "type": "java",
+            "name": "HexToByte",
+            "request": "launch",
+            "mainClass": "HexToByte",
+            "projectName": "COMPX301Assn2_e618fbd2"
+        },
+        {
+            "type": "java",
+            "name": "LZWencode",
+            "request": "launch",
+            "mainClass": "LZWencode",
+            "projectName": "COMPX301Assn2_e618fbd2",
+            "args": ["inputs/LZWencodeInput.txt"]
+        }
+    ]
+}
