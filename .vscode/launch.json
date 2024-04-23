@@ -31,6 +31,14 @@
             "mainClass": "LZWencode",
             "projectName": "COMPX301Assn2_e618fbd2",
             "args": ["inputs/LZWencodeInput.txt"]
+        },
+        {
+            "type": "java",
+            "name": "LZWdecode",
+            "request": "launch",
+            "mainClass": "LZWdecode",
+            "projectName": "COMPX301Assn2_e618fbd2",
+            "args": ["inputs/LZWdecodeInput.txt"]
         }
     ]
 }

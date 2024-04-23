@@ -70,6 +70,6 @@ public class LZWencode {
 
         //Add phrase to dictionary
         int phraseNum = trie.insert(phrase);
-        System.out.println(Integer.toString(phraseNum) + ", " + phrase.substring(phrase.length()-1));
+        System.out.println(Integer.toString(phraseNum) + "," + phrase.substring(phrase.length()-1));
     }
 }
