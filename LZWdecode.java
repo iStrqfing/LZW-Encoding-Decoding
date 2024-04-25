@@ -26,12 +26,10 @@ public class LZWdecode {
                 for (int i = 0; i < content.size(); i++) {
 
                     //Split the item to get the parent phrase number and the next character in the sequence
-                    String[] items = content.get(i).split(",");
-                    int parentNum = Integer.parseInt(items[0]);
-                    String character = items[1];
+                    String item = content.get(i);
 
                     //Insert the phrase into the trie
-                    String phrase = trie.insert(parentNum, character);
+                    //String phrase = trie.insert(parentNum, character);
 
                     //If phrase contains dollar sign (marks end of string)
                     if (phrase.contains("$")) {

@@ -7,9 +7,8 @@ public class LZWencode {
 
     public static void main(String[] args) {
         
-        //String content = "ababbaababaaabababbbbbaaaaab";
+        //String content = "aababacaacabaacada";
         trie = new MultiwayTrie();
-        String phrase = "";
 
         //If there is only one argument passed in
         if (args.length == 1 ) {
@@ -22,27 +21,40 @@ public class LZWencode {
                 String content = Files.readString(file.toPath());
                 content = content.strip();
 
+                content = "AABAABACAACABAACADA"; //TESTING
+
+                //Set the phrase to be the first character on the hexadecimal sequence. Declare nextDigit as a string
+                String phrase = Character.toString(content.charAt(0));
+                String nextDigit;
+
+                //While there is still content to encode
                 while (content.length() > 0) {
 
-                    phrase = "";
-        
-                    while(content.length() > 0) {
+                    if (content.length() >= 2) {
+
+                        //If content length is greater than or equal to 2, grab the next digit
+                        nextDigit = Character.toString(content.charAt(1));
+
+                    } else {
                         
-                        //Get the value at the start of the string and append it to the "to add to dictionary" phrase value
-                        String section = content.substring(0, 1);
-                        phrase += section;
-        
-                        //Remove the phrase value from the main string
-                        content = content.substring(1);
-        
-                        //If the phrase is not already in the dictionary
-                        if (!trie.find(phrase)) {
-        
-                            //Add phrase to dictionary then break out of loop
-                            printPhraseSequence(phrase);
-                            break;
-                        }
+                        //Otherwise, set the next digit to be null
+                        nextDigit = null;
                     }
+
+                    if (trie.find(phrase + nextDigit)) {
+                        
+                        //If the phrase already exists in the trie, concatenate the next digit to the phrase
+                        phrase += nextDigit;
+                    }
+                    else {
+
+                        //Else, add the phrase and print the sequence number. Set phrase to be the next digit
+                        printPhraseSequence(phrase + nextDigit);
+                        phrase = nextDigit;
+                    }
+
+                    //Remove the phrase value from the main string
+                    content = content.substring(1);
                 }
         
                 //Once the inputted text has been fully read, encode a "$" plus any remaining phrases to mark the end
@@ -70,6 +82,6 @@ public class LZWencode {
 
         //Add phrase to dictionary
         int phraseNum = trie.insert(phrase);
-        System.out.println(Integer.toString(phraseNum) + "," + phrase.substring(phrase.length()-1));
+        System.out.println(Integer.toString(phraseNum));
     }
 }

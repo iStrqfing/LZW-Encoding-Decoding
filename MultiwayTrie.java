@@ -3,8 +3,6 @@ import java.util.*;
 
 public class MultiwayTrie {
 
-    public int phraseNumCounter = 0;
-
     class Node {
 
         //Node stores the full value, last character in value (appended character) and the following nodes which build off of this node
@@ -57,8 +55,26 @@ public class MultiwayTrie {
         }
     }
 
+    //Phrase Number Counter - counts which phrase number we are up to
+    public int phraseNumCounter = -1;
+
     //Root node, the start of the trie
     Node root;
+
+    /*
+     * Constructor - Initialises the trie
+     * Adds all hexadecimal digits to the trie
+     */
+    public MultiwayTrie() {
+
+        //Create a list of hexadecimal digits
+    String[] hexDigits = new String[] {/* "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", */"A", "B", "C", "D"/*, "E", "F"*/};
+
+        //Initialise the trie by inserting all the hex digits already into the trie
+        for (String digit : hexDigits) {
+            insert(digit);
+        }
+    }
 
     /*
      * Insert a value into the multiway trie
