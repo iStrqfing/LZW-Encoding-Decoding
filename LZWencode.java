@@ -21,7 +21,7 @@ public class LZWencode {
                 String content = Files.readString(file.toPath());
                 content = content.strip();
 
-                content = "AABAABACAACABAACADA"; //TESTING
+                content = "AABAABACAACABAACADAA"; //TESTING
 
                 //Set the phrase to be the first character on the hexadecimal sequence. Declare nextDigit as a string
                 String phrase = Character.toString(content.charAt(0));
@@ -56,10 +56,6 @@ public class LZWencode {
                     //Remove the phrase value from the main string
                     content = content.substring(1);
                 }
-        
-                //Once the inputted text has been fully read, encode a "$" plus any remaining phrases to mark the end
-                phrase += "$";
-                printPhraseSequence(phrase);
 
             } catch (Exception e) {
                 

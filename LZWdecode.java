@@ -22,27 +22,54 @@ public class LZWdecode {
                 File file = new File(filename);
                 List<String> content = Files.readAllLines(file.toPath());
 
+                // content.clear();
+                // content.add("0");
+                // content.add("0");
+                // content.add("1");
+                // content.add("4");
+                // content.add("6");
+                // content.add("2");
+                // content.add("4");
+                // content.add("9");
+                // content.add("6");
+                // content.add("0");
+                // content.add("9");
+                // content.add("3");
+                // content.add("4");
+
+                //Grab the first number in the sequence and declare nextItem as int and phrase as string
+                int prevItem = Integer.parseInt(content.get(0));
+                int nextItem;
+                String phrase;
+                String nextChar = "";
+
+                //Print out the first phrase
+                System.out.print(trie.retrieve(prevItem));
+
                 //For each of the items in the content list
-                for (int i = 0; i < content.size(); i++) {
+                for (int i = 1; i < content.size(); i++) {
 
-                    //Split the item to get the parent phrase number and the next character in the sequence
-                    String item = content.get(i);
+                    //Grab the next item in the sequence
+                    nextItem = Integer.parseInt(content.get(i));
 
-                    //Insert the phrase into the trie
-                    //String phrase = trie.insert(parentNum, character);
-
-                    //If phrase contains dollar sign (marks end of string)
-                    if (phrase.contains("$")) {
+                    if (trie.find(nextItem)) {
                         
-                        //Calculate the end index for the substring to get rid of the dollar sign
-                        int endIndex = phrase.length() - 2;
-                        if (endIndex < 0) { endIndex = 0; }
+                        //If the next phrase is in the trie, retrieve it and store the full value in phrase
+                        phrase = trie.retrieve(nextItem); 
 
-                        //Substring the phrase so the dollar sign is not included
-                        phrase = phrase.substring(0, endIndex);
+                    } else {
+                        
+                        //Otherwise, retrieve the full value of the previous phrase number and concatenate the next character
+                        phrase = trie.retrieve(prevItem);
+                        phrase += nextChar;
                     }
 
-                    //Print out the phrase
+                    //Set the next character to the start of the phrase just seen, insert a new phrase into the trie, and set prevItem to nextItem
+                    nextChar = Character.toString(phrase.charAt(0));
+                    trie.insert(prevItem, nextChar);
+                    prevItem = nextItem;
+
+                    //Print the phrase
                     System.out.print(phrase);
                 }
 

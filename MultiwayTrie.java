@@ -53,6 +53,13 @@ public class MultiwayTrie {
         public void AddChild(Node node) {
             children.add(node);
         }
+
+        /*
+         * Returns the node's phrase number
+         */
+        public int getPhraseNum() {
+            return phraseNum;
+        }
     }
 
     //Phrase Number Counter - counts which phrase number we are up to
@@ -68,7 +75,7 @@ public class MultiwayTrie {
     public MultiwayTrie() {
 
         //Create a list of hexadecimal digits
-    String[] hexDigits = new String[] {/* "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", */"A", "B", "C", "D"/*, "E", "F"*/};
+        String[] hexDigits = new String[] {/* "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", */"A", "B", "C", "D"/*, "E", "F"*/};
 
         //Initialise the trie by inserting all the hex digits already into the trie
         for (String digit : hexDigits) {
@@ -195,7 +202,7 @@ public class MultiwayTrie {
     /*
      * Finds whether there is a phrase already in the trie
      * Takes the specified phrase as input
-     * Returns true if the phrase is in the trie
+     * Returns true if the phrase is in the trie, false otherwise
      */
     public boolean find(String value) {
 
@@ -204,6 +211,18 @@ public class MultiwayTrie {
 
         //Call the recursive insert function
         return findR(root, value);
+    }
+
+    /*
+     * Finds whether there is a phrase already in the trie
+     * Takes phrase number as input
+     * Returns true if the phrase is in the trie, false otherwise
+     */
+    public boolean find(int phraseNum) {
+
+        //If phrase number is less than or equal to the phrase number counter, return true. Otherwise false
+        if (phraseNum <= phraseNumCounter) { return true; }
+        else { return false; }
     }
 
     /*
@@ -247,5 +266,42 @@ public class MultiwayTrie {
 
         //If we have made it here, then there is no match so return false
         return false;
+    }
+
+    public String retrieve(int phraseNum) {
+
+        if (root == null) { return null; }
+        
+        return retrieveR(phraseNum, root);
+    }
+
+
+    public String retrieveR(int phraseNum, Node parent) {
+
+        //If the parent phrase number equals the desired phrase number we wish to expand on
+        if (parent.phraseNum == phraseNum) {
+            
+            //Return the parent's full value
+            return parent.fullValue;
+
+        } else {
+
+            //Grab the children of the node we currently have
+            List<Node> children = parent.getChildren();
+            String fullValue = null;
+
+            //For each of the children
+            for (Node node : children) {
+                
+                //Try to retrieve the node under one of their children
+                fullValue = retrieveR(phraseNum, node);
+
+                //If the node has been retrieved, return true
+                if (fullValue != null) { return fullValue; }
+            }
+        }
+        
+        //If node has not been retrieved, then we are at the wrong level so return null
+        return null;
     }
 }
