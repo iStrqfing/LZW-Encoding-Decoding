@@ -27,7 +27,7 @@ public class HexToByte {
       System.out.flush();
       fileReader.close();
     } catch (Exception e) {
-      System.err.println("Error: " + e.toString());
+      System.err.println("HexToByte Error: " + e.toString());
     }
   }
 }

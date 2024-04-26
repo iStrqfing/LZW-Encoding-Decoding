@@ -1,73 +1,72 @@
 import java.io.File;
 import java.nio.file.Files;
+import java.util.Scanner;
 
 public class LZWencode {
-  
+
     static MultiwayTrie trie;
 
     public static void main(String[] args) {
-        
-        //String content = "aababacaacabaacada";
+
+        // String content = "aababacaacabaacada";
         trie = new MultiwayTrie();
 
-        //If there is only one argument passed in
-        if (args.length == 1 ) {
-            
-            try {
-             
-                //Open the file specified by the argument and read all the content into the variable "content"
-                String filename = args[0];
-                File file = new File(filename);
-                String content = Files.readString(file.toPath());
-                content = content.strip();
+        try {
 
-                content = "AABAABACAACABAACADAA"; //TESTING
+            // Open the file specified by the argument and read all the content into the
+            // variable "content"
+            String content = "";
+            Scanner fileReader = new Scanner(System.in);
 
-                //Set the phrase to be the first character on the hexadecimal sequence. Declare nextDigit as a string
-                String phrase = Character.toString(content.charAt(0));
-                String nextDigit;
-
-                //While there is still content to encode
-                while (content.length() > 0) {
-
-                    if (content.length() >= 2) {
-
-                        //If content length is greater than or equal to 2, grab the next digit
-                        nextDigit = Character.toString(content.charAt(1));
-
-                    } else {
-                        
-                        //Otherwise, set the next digit to be null
-                        nextDigit = null;
-                    }
-
-                    if (trie.find(phrase + nextDigit)) {
-                        
-                        //If the phrase already exists in the trie, concatenate the next digit to the phrase
-                        phrase += nextDigit;
-                    }
-                    else {
-
-                        //Else, add the phrase and print the sequence number. Set phrase to be the next digit
-                        printPhraseSequence(phrase + nextDigit);
-                        phrase = nextDigit;
-                    }
-
-                    //Remove the phrase value from the main string
-                    content = content.substring(1);
-                }
-
-            } catch (Exception e) {
-                
-                //Display error messages if exception is thrown (likely illegal file pathname)
-                System.out.println(e.getMessage());
-                System.out.println("Please enter a valid file path");
+            // Read all lines from the file
+            while (fileReader.hasNextLine()) {
+                content += fileReader.nextLine();
             }
 
-        } else {
-            
-            //Display error message if there is not exactly one argument passed in
-            System.out.println("Error, please input a valid file pathway");
+            content = content.strip();
+            //System.out.println(content);
+            //content = "AABAABACAACABAACADAA"; // TESTING
+
+            // Set the phrase to be the first character on the hexadecimal sequence. Declare
+            // nextDigit as a string
+            String phrase = Character.toString(content.charAt(0));
+            String nextDigit;
+
+            // While there is still content to encode
+            while (content.length() > 0) {
+                
+                if (content.length() >= 2) {
+
+                    // If content length is greater than or equal to 2, grab the next digit
+                    nextDigit = Character.toString(content.charAt(1));
+
+                } else {
+
+                    // Otherwise, set the next digit to be null
+                    nextDigit = null;
+                }
+
+                if (trie.find(phrase + nextDigit)) {
+
+                    // If the phrase already exists in the trie, concatenate the next digit to the
+                    // phrase
+                    phrase += nextDigit;
+                } else {
+
+                    // Else, add the phrase and print the sequence number. Set phrase to be the next
+                    // digit
+                    printPhraseSequence(phrase + nextDigit);
+                    phrase = nextDigit;
+                }
+
+                // Remove the phrase value from the main string
+                content = content.substring(1);
+            }
+            fileReader.close();
+        } catch (Exception e) {
+
+            // Display error messages if exception is thrown (likely illegal file pathname)
+            System.out.println("LZWencode Error: " + e.getMessage());
         }
     }
 
@@ -76,7 +75,7 @@ public class LZWencode {
      */
     static private void printPhraseSequence(String phrase) {
 
-        //Add phrase to dictionary
+        // Add phrase to dictionary
         int phraseNum = trie.insert(phrase);
         System.out.println(Integer.toString(phraseNum));
     }

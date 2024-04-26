@@ -75,7 +75,7 @@ public class MultiwayTrie {
     public MultiwayTrie() {
 
         //Create a list of hexadecimal digits
-        String[] hexDigits = new String[] {/* "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", */"A", "B", "C", "D"/*, "E", "F"*/};
+        String[] hexDigits = new String[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
 
         //Initialise the trie by inserting all the hex digits already into the trie
         for (String digit : hexDigits) {

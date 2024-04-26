@@ -28,7 +28,7 @@ public class ByteToHex {
          // Print the hexadecimal string
          System.out.println(hexString.toString());
       } catch (Exception e) {
-        System.out.println("Error: " + e.toString());
+        System.out.println("ByteToHex Error: " + e.toString());
       }
     } else {
       System.out.println("Error, must include one argument: File name");

@@ -8,81 +8,85 @@ public class LZWdecode {
     static MultiwayTrie trie;
 
     public static void main(String[] args) {
-        
-        //Initialise the multiway trie
+
+        // Initialise the multiway trie
         trie = new MultiwayTrie();
 
-        //If there is only one argument passed in
-        if (args.length == 1 ) {
+        // If there is only one argument passed in
+        try {
 
-            try {
-                
-                //Open the file passed in and read all the content into the list "content"
-                String filename = args[0];
-                File file = new File(filename);
-                List<String> content = Files.readAllLines(file.toPath());
+            // Open the file passed in and read all the content into the list "content"
+            Scanner fileReader = new Scanner(System.in);
+            List<String> content = new ArrayList<String>();
 
-                // content.clear();
-                // content.add("0");
-                // content.add("0");
-                // content.add("1");
-                // content.add("4");
-                // content.add("6");
-                // content.add("2");
-                // content.add("4");
-                // content.add("9");
-                // content.add("6");
-                // content.add("0");
-                // content.add("9");
-                // content.add("3");
-                // content.add("4");
+            // Read all lines from the file
+            while (fileReader.hasNextLine()) {
+                // String line = fileReader.nextLine();
+                // System.out.println(line);
+                // content.add(line);
+                content.add(fileReader.nextLine());
+            }
 
-                //Grab the first number in the sequence and declare nextItem as int and phrase as string
-                int prevItem = Integer.parseInt(content.get(0));
-                int nextItem;
-                String phrase;
-                String nextChar = "";
+            // content.clear();
+            // content.add("0");
+            // content.add("0");
+            // content.add("1");
+            // content.add("4");
+            // content.add("6");
+            // content.add("2");
+            // content.add("4");
+            // content.add("9");
+            // content.add("6");
+            // content.add("0");
+            // content.add("9");
+            // content.add("3");
+            // content.add("4");
 
-                //Print out the first phrase
-                System.out.print(trie.retrieve(prevItem));
+            // Grab the first number in the sequence and declare nextItem as int and phrase
+            // as string
+            int prevItem = Integer.parseInt(content.get(0));
+            int nextItem;
+            String phrase;
+            String nextChar = "";
+            // Print out the first phrase
+            System.out.print(trie.retrieve(prevItem));
 
-                //For each of the items in the content list
-                for (int i = 1; i < content.size(); i++) {
+            // For each of the items in the content list
+            for (int i = 1; i < content.size(); i++) {
 
-                    //Grab the next item in the sequence
-                    nextItem = Integer.parseInt(content.get(i));
+                // Grab the next item in the sequence
+                nextItem = Integer.parseInt(content.get(i));
 
-                    if (trie.find(nextItem)) {
-                        
-                        //If the next phrase is in the trie, retrieve it and store the full value in phrase
-                        phrase = trie.retrieve(nextItem); 
+                if (trie.find(nextItem)) {
 
-                    } else {
-                        
-                        //Otherwise, retrieve the full value of the previous phrase number and concatenate the next character
-                        phrase = trie.retrieve(prevItem);
-                        phrase += nextChar;
-                    }
+                    // If the next phrase is in the trie, retrieve it and store the full value in
+                    // phrase
+                    phrase = trie.retrieve(nextItem);
 
-                    //Set the next character to the start of the phrase just seen, insert a new phrase into the trie, and set prevItem to nextItem
-                    nextChar = Character.toString(phrase.charAt(0));
-                    trie.insert(prevItem, nextChar);
-                    prevItem = nextItem;
+                } else {
 
-                    //Print the phrase
-                    System.out.print(phrase);
+                    // Otherwise, retrieve the full value of the previous phrase number and
+                    // concatenate the next character
+                    phrase = trie.retrieve(prevItem);
+                    phrase += nextChar;
                 }
 
-            } catch (Exception e) {
-                
-                //Display error message if exception is thrown
-                System.out.println(e.getMessage());
-            }
-        }
-        else {
+                // Set the next character to the start of the phrase just seen, insert a new
+                // phrase into the trie, and set prevItem to nextItem
+                // System.out.println();
+                // System.out.println(phrase);
+                nextChar = Character.toString(phrase.charAt(0));
+                trie.insert(prevItem, nextChar);
+                prevItem = nextItem;
 
-            //Display error message if there is not exactly one argument passed in
-            System.out.println("Error, please input a valid file pathway");
+                // Print the phrase
+                System.out.print(phrase);
+            }
+            fileReader.close();
+        } catch (Exception e) {
+
+            // Display error message if exception is thrown
+            System.out.println("LZWdecode Error: " + e.getMessage());
         }
     }
 }
