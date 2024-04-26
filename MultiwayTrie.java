@@ -204,10 +204,10 @@ public class MultiwayTrie {
      * Takes the specified phrase as input
      * Returns true if the phrase is in the trie, false otherwise
      */
-    public boolean find(String value) {
+    public int find(String value) {
 
         //If the root is null, initialise the root node
-        if (root == null) { return false; }
+        if (root == null) { return -1; }
 
         //Call the recursive insert function
         return findR(root, value);
@@ -230,7 +230,7 @@ public class MultiwayTrie {
      * Takes a parent node and the desired phrase as input
      * Returns true if the specified phrase is in the trie
      */
-    private boolean findR(Node parent, String value) {
+    private int findR(Node parent, String value) {
 
         //Grabs the children list from the parent node
         List<Node> children = parent.getChildren();
@@ -259,13 +259,13 @@ public class MultiwayTrie {
                 for (Node node : children) {
 
                     //If we find a match, return true
-                    if (value.equals(node.fullValue)) { return true; }
+                    if (value.equals(node.fullValue)) { return node.phraseNum; }
                 }
             }
         }
 
         //If we have made it here, then there is no match so return false
-        return false;
+        return -1;
     }
 
     public String retrieve(int phraseNum) {

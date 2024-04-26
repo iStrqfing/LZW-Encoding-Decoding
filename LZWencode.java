@@ -24,8 +24,8 @@ public class LZWencode {
             }
 
             content = content.strip();
-            //System.out.println(content);
-            //content = "AABAABACAACABAACADAA"; // TESTING
+            // System.out.println(content);
+            // content = "AABAABACAACABAACADAA"; // TESTING
 
             // Set the phrase to be the first character on the hexadecimal sequence. Declare
             // nextDigit as a string
@@ -34,7 +34,7 @@ public class LZWencode {
 
             // While there is still content to encode
             while (content.length() > 0) {
-                
+
                 if (content.length() >= 2) {
 
                     // If content length is greater than or equal to 2, grab the next digit
@@ -46,7 +46,7 @@ public class LZWencode {
                     nextDigit = null;
                 }
 
-                if (trie.find(phrase + nextDigit)) {
+                if (trie.find(phrase + nextDigit) != -1) {
 
                     // If the phrase already exists in the trie, concatenate the next digit to the
                     // phrase
@@ -55,8 +55,14 @@ public class LZWencode {
 
                     // Else, add the phrase and print the sequence number. Set phrase to be the next
                     // digit
-                    printPhraseSequence(phrase + nextDigit);
-                    phrase = nextDigit;
+                    if (trie.phraseNumCounter < 2000) {
+                        printPhraseSequence(phrase + nextDigit);
+                        phrase = nextDigit;
+                    } else {
+                        System.out.println(trie.find(phrase));
+                        phrase = nextDigit;
+                    }
+                    
                 }
 
                 // Remove the phrase value from the main string
@@ -74,9 +80,8 @@ public class LZWencode {
      * Inserts a phrase into the trie and prints out the phrase sequence
      */
     static private void printPhraseSequence(String phrase) {
-
-        // Add phrase to dictionary
         int phraseNum = trie.insert(phrase);
+        
         System.out.println(Integer.toString(phraseNum));
     }
 }
