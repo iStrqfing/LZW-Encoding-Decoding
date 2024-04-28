@@ -37,3 +37,6 @@ Uploading
 git add .
 git commit -m "your commit message"
 git push -u origin main        - For first upload, subsequent uploads doesnt need -u origin main
+
+
+Moby Dick encodes to roughly 500,000 lines

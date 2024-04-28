@@ -15,15 +15,17 @@ public class LZWencode {
 
             // Open the file specified by the argument and read all the content into the
             // variable "content"
-            String content = "";
+            //String content = "";
+            StringBuilder content = new StringBuilder();
             Scanner fileReader = new Scanner(System.in);
 
             // Read all lines from the file
             while (fileReader.hasNextLine()) {
-                content += fileReader.nextLine();
+                //content += fileReader.nextLine();
+                content.append(fileReader.nextLine().strip());
             }
 
-            content = content.strip();
+            //content = content.strip();
             // System.out.println(content);
             // content = "AABAABACAACABAACADAA"; // TESTING
 
@@ -66,7 +68,7 @@ public class LZWencode {
                 }
 
                 // Remove the phrase value from the main string
-                content = content.substring(1);
+                content.deleteCharAt(0);
             }
             fileReader.close();
         } catch (Exception e) {
