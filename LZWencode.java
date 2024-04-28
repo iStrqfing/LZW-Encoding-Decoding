@@ -8,7 +8,6 @@ public class LZWencode {
 
     public static void main(String[] args) {
 
-        // String content = "aababacaacabaacada";
         trie = new MultiwayTrie();
 
         try {
@@ -27,7 +26,7 @@ public class LZWencode {
 
             //content = content.strip();
             // System.out.println(content);
-            // content = "AABAABACAACABAACADAA"; // TESTING
+            // content.append("abaaabababbbbaba"); // TESTING
 
             // Set the phrase to be the first character on the hexadecimal sequence. Declare
             // nextDigit as a string
@@ -45,32 +44,61 @@ public class LZWencode {
                 } else {
 
                     // Otherwise, set the next digit to be null
-                    nextDigit = null;
+                    nextDigit = "$";
                 }
 
-                if (trie.find(phrase + nextDigit) != -1) {
+                //Attempt to insert the phrase into the trie
+                int phraseNum = trie.insert(phrase + nextDigit);
 
-                    // If the phrase already exists in the trie, concatenate the next digit to the
-                    // phrase
-                    phrase += nextDigit;
+                if (phraseNum == -1) {
+                    
+                    //If phrase already exists in trie, check length of remaining content
+                    if (content.length() == 1) {
+
+                        //If the content length equals 1, just find the phraseNum of phrase + next digit and print it
+                        System.out.println(trie.find(phrase + nextDigit));
+
+                    } else {
+
+                        //Else, concatenate the next digit to the phrase
+                        phrase += nextDigit;
+                    }
+
                 } else {
 
-                    // Else, add the phrase and print the sequence number. Set phrase to be the next
-                    // digit
-                    if (trie.phraseNumCounter < 2000) {
-                        printPhraseSequence(phrase + nextDigit);
-                        phrase = nextDigit;
-                    } else {
-                        System.out.println(trie.find(phrase));
-                        phrase = nextDigit;
-                    }
-                    
+                    //Print out the phrase number and set the phrase to the next digit
+                    System.out.println(phraseNum);
+                    phrase = nextDigit;
                 }
+                // if (trie.find(phrase + nextDigit) != -1) {
+
+                //     // If the phrase already exists in the trie, concatenate the next digit to the
+                //     // phrase
+                //     if (content.length() == 1) {
+                //         System.out.println(trie.find(phrase + nextDigit));
+                //     } else {
+                //         phrase += nextDigit;
+                //     }
+
+                // } else {
+
+                //     // Else, add the phrase and print the sequence number. Set phrase to be the next
+                //     // digit
+                //     if (trie.phraseNumCounter < 2000) {
+                //         printPhraseSequence(phrase + nextDigit);
+                //         phrase = nextDigit;
+                //     } else {
+                //         System.out.println(trie.find(phrase));
+                //         phrase = nextDigit;
+                //     }
+                    
+                // }
 
                 // Remove the phrase value from the main string
                 content.deleteCharAt(0);
             }
-            fileReader.close();
+            // fileReader.close();
+
         } catch (Exception e) {
 
             // Display error messages if exception is thrown (likely illegal file pathname)

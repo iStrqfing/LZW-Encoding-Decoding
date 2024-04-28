@@ -15,12 +15,12 @@ public class LZWdecode {
         // If there is only one argument passed in
         try {
 
-            // Open the file passed in and read all the content into the list "content"
             BufferedReader fileReader = new BufferedReader(new InputStreamReader(System.in));
             List<String> content = new ArrayList<String>();
+            String line;
 
             // Read all lines from the file
-            while ((line = reader.readLine()) != null) {
+            while ((line = fileReader.readLine()) != null) {
                 // String line = fileReader.nextLine();
                 // System.out.println(line);
                 // content.add(line);

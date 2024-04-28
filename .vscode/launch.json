@@ -40,5 +40,13 @@
             "projectName": "COMPX301Assn2_e618fbd2",
             "args": ["inputs/LZWdecodeInput.txt"]
         }
+        {
+            "type": "java",
+            "name": "LZWpack",
+            "request": "launch",
+            "mainClass": "LZWpack",
+            "projectName": "COMPX301Assn2_e618fbd2",
+            "args": ["result.txt"]
+        }
     ]
 }
