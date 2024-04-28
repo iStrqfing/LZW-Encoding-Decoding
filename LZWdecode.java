@@ -3,80 +3,62 @@ import java.beans.PropertyChangeSupport;
 import java.io.*;
 import java.util.*;
 
+/***
+ * LZWdecode takes LZW encoded strings from system output and decodes it using
+ * the LZW decompression method. The decoded data is outputed to system.out.
+ */
 public class LZWdecode {
 
     static MultiwayTrie trie;
 
     public static void main(String[] args) {
 
-        // Initialise the multiway trie
-        trie = new MultiwayTrie();
+        // Initialise the HashMap with hex digits
+        HashMap<Integer, String> hashMap = new HashMap<>();
+        String[] hexDigits = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
+        for (int i = 0; i < hexDigits.length; i++) {
+            hashMap.put(i, hexDigits[i]);
+        }
 
-        // If there is only one argument passed in
         try {
-
+            // Create buffered reader for system input
             BufferedReader fileReader = new BufferedReader(new InputStreamReader(System.in));
-            List<String> content = new ArrayList<String>();
+
+            // String array for phrase numbers
+            List<String> phraseArray = new ArrayList<String>();
             String line;
 
-            // Read all lines from the file
+            // Read all lines from the reader and add the line to the phrase array
             while ((line = fileReader.readLine()) != null) {
-                // String line = fileReader.nextLine();
-                // System.out.println(line);
-                // content.add(line);
-                content.add(line);
+                phraseArray.add(line);
             }
 
-            // content.clear();
-            // content.add("0");
-            // content.add("0");
-            // content.add("1");
-            // content.add("4");
-            // content.add("6");
-            // content.add("2");
-            // content.add("4");
-            // content.add("9");
-            // content.add("6");
-            // content.add("0");
-            // content.add("9");
-            // content.add("3");
-            // content.add("4");
-
-            // Grab the first number in the sequence and declare nextItem as int and phrase
-            // as string
-            int prevItem = Integer.parseInt(content.get(0));
+            // Grab the first number in the sequence and declare nextItem as int and phrase as string
+            int prevItem = Integer.parseInt(phraseArray.get(0));
             int nextItem;
             String phrase;
             String nextChar = "";
+
             // Print out the first phrase
-            System.out.print(trie.retrieve(prevItem));
+            System.out.print(hashMap.get(prevItem));
 
-            // For each of the items in the content list
-            for (int i = 1; i < content.size(); i++) {
+            // For each of the phrases in the phraseArray
+            for (int i = 1; i < phraseArray.size(); i++) {
+                // Grab the next item in the array
+                nextItem = Integer.parseInt(phraseArray.get(i));
 
-                // Grab the next item in the sequence
-                nextItem = Integer.parseInt(content.get(i));
-
-                if (trie.find(nextItem)) {
-
-                    // If the next phrase is in the trie, retrieve it and store the full value in
-                    // phrase
-                    phrase = trie.retrieve(nextItem);
-
-                } else {
-
-                    // Otherwise, retrieve the full value of the previous phrase number and
-                    // concatenate the next character
-                    phrase = trie.retrieve(prevItem);
+                // If the hashmap contains the next item
+                if (hashMap.containsKey(nextItem)) {
+                    // If the next item is in the hashmap, retrieve it and store the full value in phrase
+                    phrase = hashMap.get(nextItem);
+                } else { // Else retrieve the full value of the previous phrase number and concatenate the next character
+                    phrase = hashMap.get(prevItem);
                     phrase += nextChar;
                 }
 
-                // Set the next character to the start of the phrase just seen, insert a new
-                // phrase into the trie, and set prevItem to nextItem
-                // System.out.println();
-                // System.out.println(phrase);
+                // Set the next character to the start of the phrase just seen, insert the new phrase into the hashmap, and set prevItem to nextItem
                 nextChar = Character.toString(phrase.charAt(0));
-                trie.insert(prevItem, nextChar);
+                hashMap.put(hashMap.size(), hashMap.get(prevItem) + nextChar);
                 prevItem = nextItem;
 
                 // Print the phrase
@@ -84,7 +66,6 @@ public class LZWdecode {
             }
             fileReader.close();
         } catch (Exception e) {
-
             // Display error message if exception is thrown
             System.out.println("LZWdecode Error: " + e.getMessage());
         }

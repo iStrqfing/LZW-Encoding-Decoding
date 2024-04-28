@@ -41,7 +41,7 @@ public class MultiwayTrie {
         }
     }
 
-    private int MAX_TRIE_SIZE = 2000;
+    private int MAX_TRIE_SIZE = 10000000;
 
     //Phrase Number Counter - counts which phrase number we are up to
     public int phraseNumCounter = -1;

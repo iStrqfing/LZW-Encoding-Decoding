@@ -1,7 +1,12 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.Scanner;
 
+/***
+ * LZWencode takes hex strings from system output and encodes it using the LZW compression method. The encoded data is outputed to system.out.
+ */
 public class LZWencode {
 
     static MultiwayTrie trie;
@@ -11,107 +16,55 @@ public class LZWencode {
         trie = new MultiwayTrie();
 
         try {
-
-            // Open the file specified by the argument and read all the content into the
-            // variable "content"
-            //String content = "";
-            StringBuilder content = new StringBuilder();
-            Scanner fileReader = new Scanner(System.in);
+            // Create buffered reader for system input
+            BufferedReader fileReader = new BufferedReader(new InputStreamReader(System.in));
+            String content;
 
             // Read all lines from the file
-            while (fileReader.hasNextLine()) {
-                //content += fileReader.nextLine();
-                content.append(fileReader.nextLine().strip());
-            }
+            while ((content = fileReader.readLine()) != null) {
+                // Set the phrase to be the first character of the hexadecimal sequence. Declare nextChar as a string
+                String phrase = Character.toString(content.charAt(0));
+                String nextChar;
 
-            //content = content.strip();
-            // System.out.println(content);
-            // content.append("abaaabababbbbaba"); // TESTING
+                // The character pointer for the string
+                int contentPointer = 0;
 
-            // Set the phrase to be the first character on the hexadecimal sequence. Declare
-            // nextDigit as a string
-            String phrase = Character.toString(content.charAt(0));
-            String nextDigit;
-
-            // While there is still content to encode
-            while (content.length() > 0) {
-
-                if (content.length() >= 2) {
-
-                    // If content length is greater than or equal to 2, grab the next digit
-                    nextDigit = Character.toString(content.charAt(1));
-
-                } else {
-
-                    // Otherwise, set the next digit to be null
-                    nextDigit = "$";
-                }
-
-                //Attempt to insert the phrase into the trie
-                int phraseNum = trie.insert(phrase + nextDigit);
-
-                if (phraseNum == -1) {
-                    
-                    //If phrase already exists in trie, check length of remaining content
-                    if (content.length() == 1) {
-
-                        //If the content length equals 1, just find the phraseNum of phrase + next digit and print it
-                        System.out.println(trie.find(phrase + nextDigit));
-
+                // While there is still content to encode
+                while (content.length() > contentPointer) {
+                    // If we are not at the last character in the string
+                    if (content.length() - contentPointer > 1) {
+                        // Grab the next char in the string
+                        nextChar = Character.toString(content.charAt(contentPointer + 1));
                     } else {
-
-                        //Else, concatenate the next digit to the phrase
-                        phrase += nextDigit;
+                        // Else set the next char to nothing
+                        nextChar = "";
                     }
 
-                } else {
+                    // Attempt to insert the phrase into the trie
+                    int phraseNum = trie.insert(phrase + nextChar);
 
-                    //Print out the phrase number and set the phrase to the next digit
-                    System.out.println(phraseNum);
-                    phrase = nextDigit;
+                    // If phrase was already in the trie
+                    if (phraseNum == -1) {
+                        // If we are at the end of the string
+                        if (content.length() == contentPointer + 1) {
+                            // Print the phrase number
+                            System.out.println(trie.find(phrase + nextChar));
+                        } else { // Else, concatenate the next character to the phrase
+                            phrase += nextChar;
+                        }
+                    } else { // Else print out the phrase number and set the phrase to the next character     
+                        System.out.println(phraseNum);
+                        phrase = nextChar;
+                    }
+                    // Increase content pointer
+                    contentPointer++;
                 }
-                // if (trie.find(phrase + nextDigit) != -1) {
-
-                //     // If the phrase already exists in the trie, concatenate the next digit to the
-                //     // phrase
-                //     if (content.length() == 1) {
-                //         System.out.println(trie.find(phrase + nextDigit));
-                //     } else {
-                //         phrase += nextDigit;
-                //     }
-
-                // } else {
-
-                //     // Else, add the phrase and print the sequence number. Set phrase to be the next
-                //     // digit
-                //     if (trie.phraseNumCounter < 2000) {
-                //         printPhraseSequence(phrase + nextDigit);
-                //         phrase = nextDigit;
-                //     } else {
-                //         System.out.println(trie.find(phrase));
-                //         phrase = nextDigit;
-                //     }
-                    
-                // }
-
-                // Remove the phrase value from the main string
-                content.deleteCharAt(0);
             }
-            // fileReader.close();
+            fileReader.close();
 
         } catch (Exception e) {
-
             // Display error messages if exception is thrown (likely illegal file pathname)
             System.out.println("LZWencode Error: " + e.getMessage());
         }
-    }
-
-    /*
-     * Inserts a phrase into the trie and prints out the phrase sequence
-     */
-    static private void printPhraseSequence(String phrase) {
-        int phraseNum = trie.insert(phrase);
-        
-        System.out.println(Integer.toString(phraseNum));
     }
 }

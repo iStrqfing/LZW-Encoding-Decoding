@@ -1,5 +1,6 @@
 /**
- * ByteToHex - Sourced from https://stackoverflow.com/questions/2817752/how-can-i-convert-a-byte-array-to-hexadecimal-in-java
+ * This class converts bytes to hexdigits
+ * ByteToHex - Inspiration from https://stackoverflow.com/questions/2817752/how-can-i-convert-a-byte-array-to-hexadecimal-in-java
  */
 import java.io.File;
 import java.nio.file.Files;
@@ -17,6 +18,7 @@ public class ByteToHex {
 
          // Convert bytes to hexadecimal string
          StringBuilder hexString = new StringBuilder();
+
          for (byte b : fileContent) {
              String hex = Integer.toHexString(b & 0xFF);
              if (hex.length() == 1) {

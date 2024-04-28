@@ -22,6 +22,13 @@ Tests for ByteToHex to LZWencode to LZWdecode to HexToByte
   java ByteToHex inputs/test.txt | java LZWencode | java LZWdecode | java HexToByte > outputs/hexToByteOutput.txt
   java ByteToHex inputs/MobyDick.txt | java LZWencode | java LZWdecode | java HexToByte > outputs/MobyDick.txt
   java ByteToHex inputs/BrownCorpus.txt | java LZWencode | java LZWdecode | java HexToByte > outputs/BrownCorpusOutput.txt
+___________________________________________________________________________________________________________________________________________________
+
+Tests for ByteToHex to LZWencode to LZWpack to LZWunpack to LZWdecode to HexToByte
+  java ByteToHex inputs/test.txt | java LZWencode | java LZWpack | java LZWunpack | java LZWdecode | java HexToByte > outputs/hexToByteOutput.txt
+  java ByteToHex inputs/MobyDick.txt | java LZWencode | java LZWpack | java LZWunpack | java LZWdecode | java HexToByte > outputs/MobyDick.txt
+  java ByteToHex inputs/BrownCorpus.txt | java LZWencode | java LZWpack | java LZWunpack | java LZWdecode | java HexToByte > outputs/BrownCorpusOutput.txt
+
 
 | directs output from system.out.print/write to the next command
 > directs output from system.out.print/write to file name
@@ -40,3 +47,10 @@ git push -u origin main        - For first upload, subsequent uploads doesnt nee
 
 
 Moby Dick encodes to roughly 500,000 lines
+
+md5sum inputs/test.txt outputs/hexToByteOutput.txt
+md5sum inputs/MobyDick.txt outputs/MobyDick.txt
+
+Don't think we need .strip()
+
+Almost done, need to fix unpack breaking last value up into two values e.g. last value 50 is 48 and 2 for test.txt
