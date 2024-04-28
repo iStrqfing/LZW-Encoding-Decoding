@@ -34,31 +34,10 @@ public class MultiwayTrie {
         }
 
         /*
-         * Returns the list of child nodes of the current node
-         */
-        public List<Node> getChildren() {
-            return children;
-        }
-
-        /*
-         * Returns the full string value of the current node
-         */
-        public String getFullValue() {
-            return fullValue;
-        }
-
-        /*
          * Adds a node as a child to the childrens list
          */
         public void AddChild(Node node) {
             children.add(node);
-        }
-
-        /*
-         * Returns the node's phrase number
-         */
-        public int getPhraseNum() {
-            return phraseNum;
         }
     }
 
@@ -93,8 +72,52 @@ public class MultiwayTrie {
         //If the root is null, initialise the root node
         if (root == null) { root = new Node(null, phraseNumCounter); }
 
-        //Call the recursive insert function. Returns phrase number of parent of our inserted node
-        return insertR(root, value);
+        // //Call the recursive insert function. Returns phrase number of parent of our inserted node
+        // return insertR(root, value);
+
+        //Boolean states whether node has been inserted or not
+        boolean inserted = false;
+
+        Node parent = root;
+
+        //While the node is yet to be inserted
+        while(!inserted) {
+
+            //Grabs the children list from the parent node
+            List<Node> children = parent.children;
+
+            if (children.size() < 1) {
+                
+                //If the children list size is less than one, insert node here. Mark inserted as true
+                insertNodeHere(parent, value);
+                inserted = true;
+
+            } else {
+                
+                if (value.length() <= children.get(0).fullValue.length()) {
+
+                    //Else, if value of same length as children, insert node here. inserted = true
+                    insertNodeHere(parent, value);
+                    inserted = true;
+
+                } else {
+                    
+                    //Else, for each of the parent's children
+                    for (Node node : children) {
+                        
+                        if (value.startsWith(node.fullValue)) {
+
+                            //If the value starts with the full value of the current node, set the new parent to be the current node
+                            parent = node;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Returns the phrase number of the parent of our inserted node
+        return parent.phraseNum;
     }
 
     /*
@@ -116,43 +139,85 @@ public class MultiwayTrie {
      * Takes parent node and string value as input
      * Returns phrase number of parent
      */
-    private int insertR(Node parent, String value) {
+    // private int insertR(Node parent, String value) {
 
-        //Grabs the children list from the parent node
-        List<Node> children = parent.getChildren();
+    //     // //Grabs the children list from the parent node
+    //     // List<Node> children = parent.children;
 
-        //If there is at least one child to the parent node
-        if (children.size() >= 1) {
+    //     // //If there is at least one child to the parent node
+    //     // if (children.size() >= 1) {
         
-            //If the value length is greater than any of the children, then we likely need to move down to a child node
-            if (value.length() > children.get(0).getFullValue().length()) {
+    //     //     //If the value length is greater than any of the children, then we likely need to move down to a child node
+    //     //     if (value.length() > children.get(0).fullValue.length()) {
                 
-                //For each of the nodes in the parent list
-                for (Node node : children) {
+    //     //         //For each of the nodes in the parent list
+    //     //         for (Node node : children) {
 
-                    //If the value we have starts with the entirety of the child node
-                    if (value.startsWith(node.fullValue)) {
+    //     //             //If the value we have starts with the entirety of the child node
+    //     //             if (value.startsWith(node.fullValue)) {
 
-                        //Then we wish to build off of this node, so recursively call this method again but with the parent node being the current node  
-                        return insertR(node, value);
-                    }
-                }
+    //     //                 //Then we wish to build off of this node, so recursively call this method again but with the parent node being the current node  
+    //     //                 return insertR(node, value);
+    //     //             }
+    //     //         }
 
-            } else {
+    //     //     } else {
                 
-                //Else, we will likely insert the phrase in this level as a new node
-                insertNodeHere(parent, value);
-            }
+    //     //         //Else, we will likely insert the phrase in this level as a new node
+    //     //         insertNodeHere(parent, value);
+    //     //     }
 
-        } else {
+    //     // } else {
             
-            //Else, the parent node has no children (no more levels to move down) so add a node here
-            insertNodeHere(parent, value);
-        }
+    //     //     //Else, the parent node has no children (no more levels to move down) so add a node here
+    //     //     insertNodeHere(parent, value);
+    //     // }
 
-        //Returns the phrase number of the parent of our inserted node
-        return parent.phraseNum;
-    }
+    //     /////////////////////////////////////////////////////////////////
+
+    //     //Boolean states whether node has been inserted or not
+    //     boolean inserted = false;
+
+    //     //While the node is yet to be inserted
+    //     while(!inserted) {
+
+    //         //Grabs the children list from the parent node
+    //         List<Node> children = parent.children;
+
+    //         if (children.size() < 1) {
+                
+    //             //If the children list size is less than one, insert node here. Mark inserted as true
+    //             insertNodeHere(parent, value);
+    //             inserted = true;
+
+    //         } else {
+                
+    //             if (value.length() <= children.get(0).fullValue.length()) {
+
+    //                 //Else, if value of same length as children, insert node here. inserted = true
+    //                 insertNodeHere(parent, value);
+    //                 inserted = true;
+
+    //             } else {
+                    
+    //                 //Else, for each of the parent's children
+    //                 for (Node node : children) {
+                        
+    //                     if (value.startsWith(node.fullValue)) {
+
+    //                         //If the value starts with the full value of the current node, set the new parent to be the current node
+    //                         parent = node;
+    //                         break;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     //////////////////////////////////////////////////////////////////
+
+    //     //Returns the phrase number of the parent of our inserted node
+    //     return parent.phraseNum;
+    // }
 
     /*
      * Inserts a value into the multiway trie by recursively going down node levels to each the place to insert
@@ -171,7 +236,7 @@ public class MultiwayTrie {
         } else {
 
             //Grab the children of the node we currently have
-            List<Node> children = parent.getChildren();
+            List<Node> children = parent.children;
             String fullValue = null;
 
             //For each of the children
@@ -209,8 +274,53 @@ public class MultiwayTrie {
         //If the root is null, initialise the root node
         if (root == null) { return -1; }
 
-        //Call the recursive insert function
-        return findR(root, value);
+        // //Call the recursive insert function
+        // return findR(root, value);
+
+        Node parent = root;
+        boolean searching = true;
+
+        //While the node is yet to be inserted
+        while(searching) {
+
+            //Grabs the children list from the parent node
+            List<Node> children = parent.children;
+
+            if (children.size() < 1) {
+                
+                searching = false;
+
+            } else {
+                
+                if (value.length() <= children.get(0).fullValue.length()) {
+
+                    //Else, we will likely find the phrase in this level as a node
+                    //For each node in the children list
+                    for (Node node : children) {
+
+                        //If we find a match, return true
+                        if (value.equals(node.fullValue)) { return node.phraseNum; }
+                    }
+
+                    searching = false;
+
+                } else {
+                    
+                    //For each of the nodes in the parent list
+                    for (Node node : children) {
+
+                        //If the value we have starts with the entirety of the child node
+                        if (value.startsWith(node.fullValue)) {
+
+                            //Then we wish to build off of this node, so recursively call this method again but with the parent node being the current node  
+                            parent = node;
+                        }
+                    }
+                }
+            }
+        }
+
+        return -1;
     }
 
     /*
@@ -230,43 +340,43 @@ public class MultiwayTrie {
      * Takes a parent node and the desired phrase as input
      * Returns true if the specified phrase is in the trie
      */
-    private int findR(Node parent, String value) {
+    // private int findR(Node parent, String value) {
 
-        //Grabs the children list from the parent node
-        List<Node> children = parent.getChildren();
+    //     //Grabs the children list from the parent node
+    //     List<Node> children = parent.children;
 
-        //If there is at least one child to the parent node
-        if (children.size() >= 1) {
+    //     //If there is at least one child to the parent node
+    //     if (children.size() >= 1) {
 
-            //If the value length is greater than any of the children, then we likely need to move down to a child node
-            if (value.length() > children.get(0).getFullValue().length()) {
+    //         //If the value length is greater than any of the children, then we likely need to move down to a child node
+    //         if (value.length() > children.get(0).fullValue.length()) {
                 
-                //For each of the nodes in the parent list
-                for (Node node : children) {
+    //             //For each of the nodes in the parent list
+    //             for (Node node : children) {
 
-                    //If the value we have starts with the entirety of the child node
-                    if (value.startsWith(node.fullValue)) {
+    //                 //If the value we have starts with the entirety of the child node
+    //                 if (value.startsWith(node.fullValue)) {
 
-                        //Then we wish to build off of this node, so recursively call this method again but with the parent node being the current node  
-                        return findR(node, value);
-                    }
-                }
+    //                     //Then we wish to build off of this node, so recursively call this method again but with the parent node being the current node  
+    //                     return findR(node, value);
+    //                 }
+    //             }
 
-            } else {
+    //         } else {
                 
-                //Else, we will likely find the phrase in this level as a node
-                //For each node in the children list
-                for (Node node : children) {
+    //             //Else, we will likely find the phrase in this level as a node
+    //             //For each node in the children list
+    //             for (Node node : children) {
 
-                    //If we find a match, return true
-                    if (value.equals(node.fullValue)) { return node.phraseNum; }
-                }
-            }
-        }
+    //                 //If we find a match, return true
+    //                 if (value.equals(node.fullValue)) { return node.phraseNum; }
+    //             }
+    //         }
+    //     }
 
-        //If we have made it here, then there is no match so return false
-        return -1;
-    }
+    //     //If we have made it here, then there is no match so return false
+    //     return -1;
+    // }
 
     public String retrieve(int phraseNum) {
 
@@ -287,7 +397,7 @@ public class MultiwayTrie {
         } else {
 
             //Grab the children of the node we currently have
-            List<Node> children = parent.getChildren();
+            List<Node> children = parent.children;
             String fullValue = null;
 
             //For each of the children
