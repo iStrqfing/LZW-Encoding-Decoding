@@ -1,3 +1,5 @@
+#LZW Encoder and Decoder for text
+
 Use Cases
 
 Tests ByteToHex conversion
